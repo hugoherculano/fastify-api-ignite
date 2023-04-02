@@ -1,16 +1,15 @@
 import fastify from "fastify";
-import crypto from "node:crypto";
-import { knex } from "./database";
+import cookie from "@fastify/cookie";
+import { transactionsRoutes } from "./routes/transactions";
 
 const app = fastify();
 
-app.get('/hello', async () => {
-    const transactions = await knex("transactions")
-    .where("amount", 500)
-    .select("*");
+app.register(cookie);
 
-    return transactions;
+app.register(transactionsRoutes, {
+    prefix: "transactions",
 });
+
 
 app.listen({ port: 3333 }).then(() => {
     console.log("Runnirg!🤘🏻✅")
